@@ -7,8 +7,8 @@ const resolvers = {
     books: async () => {
         return Book.find();
     },
-    book: async (parent, {title}) => {
-        return Book.findOne({title})
+    book: async (parent, {bookId}) => {
+        return Book.findOne({bookId})
     },
     users: async () => {
       return User.find();
@@ -47,11 +47,10 @@ const resolvers = {
 
       return { token, user };
     },
-    addBook: async (parent, { thoughtText }, context) => {
+    addBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        const thought = await Thought.create({
-          thoughtText,
-          thoughtAuthor: context.user.username,
+        const book = await Book.create({
+          bookId
         });
 
         await User.findOneAndUpdate(

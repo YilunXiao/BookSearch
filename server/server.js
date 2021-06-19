@@ -11,7 +11,7 @@ const { authMiddleware } = require('./utils/auth');
 const db = require('./config/connection');
 
 // ROUTES NOT NEEDED WITH APOLLO SERVER
-const routes = require('./routes');
+// const routes = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // NOT REQUIRED WITH APOLLO SERVER
-app.use(routes);
+// app.use(routes);
 
 // Apollo route?
 app.get('*', (req, res) => {
