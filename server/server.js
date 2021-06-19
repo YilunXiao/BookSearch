@@ -16,6 +16,18 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Create new instance of apollo server
+const server = new ApolloServer({
+  // Pass middleware as arguments
+  typeDefs,
+  resolvers,
+  context: authMiddleware,
+});
+
+// pass express app to server as middleware
+server.applyMiddleware({ app });
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -24,8 +36,17 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
+// NOT REQUIRED WITH APOLLO SERVER
 app.use(routes);
 
+// Apollo route?
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 db.once('open', () => {
-  app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+  app.listen(PORT, () => {
+    console.log(`🌍 Now listening on localhost:${PORT}`)
+    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+  });
 });
