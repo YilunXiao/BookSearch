@@ -11,10 +11,10 @@ const resolvers = {
         return Book.findOne({bookId})
     },
     users: async () => {
-      return User.find();
+      return User.find().populate('savedBooks');
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username });
+      return User.findOne({ username }).populate('savedBooks');
     },
     me: async (parent, args, context) => {
       if (context.user) {
